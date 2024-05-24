@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, jsonify
-from transformers import pipeline, AutoTokenizer, AutoModelForCausalLM
+import transformers
+import torch
 import os
 
 main = Blueprint('main', __name__)
@@ -11,12 +12,13 @@ huggingface_token = os.getenv("HUGGINGFACE_TOKEN")
 if not huggingface_token:
     raise EnvironmentError("HUGGINGFACE_TOKEN environment variable is not set")
 
-# Load model and tokenizer directly with authorization token
-tokenizer = AutoTokenizer.from_pretrained(model_id, use_auth_token=huggingface_token)
-model = AutoModelForCausalLM.from_pretrained(model_id, use_auth_token=huggingface_token)
-
-# Create text generation pipeline
-pipe = pipeline("text-generation", model=model, tokenizer=tokenizer)
+pipeline = transformers.pipeline(
+    "text-generation",
+    model=model_id,
+    model_kwargs={"torch_dtype": torch.bfloat16},
+    use_auth_token=huggingface_token,
+    device_map="auto",
+)
 
 @main.route('/')
 def index():
@@ -25,11 +27,35 @@ def index():
 @main.route('/generate', methods=['POST'])
 def generate():
     data = request.get_json()
-    prompt = data['prompt']
-    max_tokens = int(os.getenv("MAX_TOKENS", 100))
-    temperature = float(os.getenv("TEMPERATURE", 1.0))
+    user_message = data['prompt']
     
-    # Generate text using the pipeline
-    output = pipe(prompt, max_length=max_tokens, temperature=temperature)
-    generated_text = output[0]['generated_text']
+    messages = [
+        {"role": "system", "content": "You are a pirate chatbot who always responds in pirate speak!"},
+        {"role": "user", "content": user_message},
+    ]
+
+    prompt = pipeline.tokenizer.apply_chat_template(
+        messages, 
+        tokenize=False, 
+        add_generation_prompt=True
+    )
+
+    terminators = [
+        pipeline.tokenizer.eos_token_id,
+        pipeline.tokenizer.convert_tokens_to_ids("")
+    ]
+
+    max_tokens = int(os.getenv("MAX_TOKENS", 256))
+    temperature = float(os.getenv("TEMPERATURE", 0.6))
+    
+    outputs = pipeline(
+        prompt,
+        max_new_tokens=max_tokens,
+        eos_token_id=terminators,
+        do_sample=True,
+        temperature=temperature,
+        top_p=0.9,
+    )
+
+    generated_text = outputs[0]["generated_text"][len(prompt):]
     return jsonify({'generated_text': generated_text})
