@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, jsonify
-from transformers import AutoTokenizer, AutoModelForCausalLM, TextGenerationPipeline
+from transformers import pipeline, AutoTokenizer, AutoModelForCausalLM
 import os
 
 main = Blueprint('main', __name__)
@@ -16,7 +16,7 @@ tokenizer = AutoTokenizer.from_pretrained(model_id, use_auth_token=huggingface_t
 model = AutoModelForCausalLM.from_pretrained(model_id, use_auth_token=huggingface_token)
 
 # Create text generation pipeline
-pipe = TextGenerationPipeline(model=model, tokenizer=tokenizer)
+pipe = pipeline("text-generation", model=model, tokenizer=tokenizer)
 
 @main.route('/')
 def index():
