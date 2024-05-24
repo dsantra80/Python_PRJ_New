@@ -36,7 +36,7 @@ jobs:
       env:
         HUGGINGFACE_TOKEN: ${{ secrets.HUGGINGFACE_TOKEN }}
       run: |
-        pip install pytest
+        pip install pytest python-dotenv
         pytest
 
     - name: Set up Docker Buildx
