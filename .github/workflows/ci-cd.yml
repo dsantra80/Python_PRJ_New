@@ -54,6 +54,8 @@ jobs:
         context: .
         push: true
         tags: ${{ secrets.DOCKER_HUB_USERNAME }}/flask_huggingface_app:latest
+      env:
+        HUGGINGFACE_TOKEN: ${{ secrets.HUGGINGFACE_TOKEN }}
 
     - name: Deploy to Docker Compose
       run: |
