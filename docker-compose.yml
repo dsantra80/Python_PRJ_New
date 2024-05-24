@@ -11,4 +11,3 @@ services:
       - TEMPERATURE=${TEMPERATURE}
     volumes:
       - .:/app
-
