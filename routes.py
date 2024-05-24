@@ -6,7 +6,7 @@ import os
 main = Blueprint('main', __name__)
 
 # Hugging Face API configuration
-model_id = "meta-llama/Meta-Llama-3-8B-Instruct"
+model_id = "gpt2"  # Replace this with your model_id once verified
 huggingface_token = os.getenv("HUGGINGFACE_TOKEN")
 
 if not huggingface_token:
