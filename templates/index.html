@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Flask Hugging Face App</title>
+</head>
+<body>
+    <h1>Welcome to the Flask Hugging Face App</h1>
+    <form id="generate-form">
+        <label for="prompt">Prompt:</label>
+        <input type="text" id="prompt" name="prompt" required>
+        <button type="submit">Generate</button>
+    </form>
+    <pre id="output"></pre>
+    <script>
+        document.getElementById('generate-form').onsubmit = async (e) => {
+            e.preventDefault();
+            const prompt = document.getElementById('prompt').value;
+            const response = await fetch('/generate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ prompt })
+            });
+            const result = await response.json();
+            document.getElementById('output').innerText = result.generated_text;
+        };
+    </script>
+</body>
+</html>
