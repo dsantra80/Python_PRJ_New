@@ -1,12 +1,8 @@
 from flask import Blueprint, render_template, request, jsonify
 from transformers import pipeline, AutoTokenizer, AutoModelForCausalLM
 import os
-from dotenv import load_dotenv
 
 main = Blueprint('main', __name__)
-
-# Load environment variables
-load_dotenv()
 
 # Hugging Face API configuration
 model_id = "meta-llama/Meta-Llama-3-8B-Instruct"
