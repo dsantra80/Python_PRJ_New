@@ -8,6 +8,9 @@ main = Blueprint('main', __name__)
 model_id = "meta-llama/Meta-Llama-3-8B-Instruct"
 huggingface_token = os.getenv("HUGGINGFACE_TOKEN")
 
+if not huggingface_token:
+    raise EnvironmentError("HUGGINGFACE_TOKEN environment variable is not set")
+
 # Load the text generation pipeline with authorization token
 pipe = pipeline("text-generation", model=model_id, tokenizer=model_id, use_auth_token=huggingface_token)
 
