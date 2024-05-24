@@ -6,6 +6,9 @@ from flask import Flask
 # Ensure the application root is in the Python path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
+# Set the Hugging Face token in the environment
+os.environ['HUGGINGFACE_TOKEN'] = os.getenv('HUGGINGFACE_TOKEN', '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')
+
 from routes import main
 
 @pytest.fixture
