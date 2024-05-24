@@ -4,13 +4,16 @@ import os
 
 main = Blueprint('main', __name__)
 
-# Load the text generation pipeline
+# Hugging Face API configuration
 model_id = "meta-llama/Meta-Llama-3-8B-Instruct"
-pipe = pipeline("text-generation", model=model_id, tokenizer=model_id)
+huggingface_token = os.getenv("HUGGINGFACE_TOKEN")
 
-# Load model and tokenizer directly
-tokenizer = AutoTokenizer.from_pretrained(model_id)
-model = AutoModelForCausalLM.from_pretrained(model_id)
+# Load the text generation pipeline with authorization token
+pipe = pipeline("text-generation", model=model_id, tokenizer=model_id, use_auth_token=huggingface_token)
+
+# Load model and tokenizer directly with authorization token
+tokenizer = AutoTokenizer.from_pretrained(model_id, use_auth_token=huggingface_token)
+model = AutoModelForCausalLM.from_pretrained(model_id, use_auth_token=huggingface_token)
 
 @main.route('/')
 def index():
