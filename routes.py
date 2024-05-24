@@ -17,7 +17,7 @@ tokenizer = AutoTokenizer.from_pretrained(model_id, use_auth_token=huggingface_t
 model = AutoModelForCausalLM.from_pretrained(
     model_id,
    # torch_dtype=torch.bfloat16,
-    device_map="auto",
+   # device_map="auto",
     use_auth_token=huggingface_token
 )
 
