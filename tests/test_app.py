@@ -2,14 +2,15 @@ import sys
 import os
 import pytest
 from flask import Flask
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Ensure the application root is in the Python path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-# Set the environment variable for testing
-os.environ["HUGGINGFACE_TOKEN"] = "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"
-
-from routes import main  # Now this should work
+from routes import main
 
 @pytest.fixture
 def client():
