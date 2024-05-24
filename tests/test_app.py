@@ -1,6 +1,12 @@
+import sys
+import os
 import pytest
 from flask import Flask
-from routes import main
+
+# Ensure the application root is in the Python path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from routes import main  # Now this should work
 
 @pytest.fixture
 def client():
