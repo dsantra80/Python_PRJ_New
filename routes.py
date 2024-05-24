@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, jsonify
-from transformers import pipeline, AutoTokenizer, AutoModelForCausalLM
+from transformers import AutoTokenizer, AutoModelForCausalLM, TextGenerationPipeline
 import os
 
 main = Blueprint('main', __name__)
@@ -11,12 +11,12 @@ huggingface_token = os.getenv("HUGGINGFACE_TOKEN")
 if not huggingface_token:
     raise EnvironmentError("HUGGINGFACE_TOKEN environment variable is not set")
 
-# Load the text generation pipeline with authorization token
-pipe = pipeline("text-generation", model=model_id, use_auth_token=huggingface_token)
-
 # Load model and tokenizer directly with authorization token
 tokenizer = AutoTokenizer.from_pretrained(model_id, use_auth_token=huggingface_token)
 model = AutoModelForCausalLM.from_pretrained(model_id, use_auth_token=huggingface_token)
+
+# Create text generation pipeline
+pipe = TextGenerationPipeline(model=model, tokenizer=tokenizer)
 
 @main.route('/')
 def index():
