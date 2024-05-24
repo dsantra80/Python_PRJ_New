@@ -7,7 +7,7 @@ from flask import Flask
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 # Set the environment variable for testing
-os.environ["HUGGINGFACE_TOKEN"] = "your_huggingface_token_here"
+os.environ["HUGGINGFACE_TOKEN"] = "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"
 
 from routes import main  # Now this should work
 
