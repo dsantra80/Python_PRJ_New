@@ -1,6 +1,10 @@
 from flask import Flask
 from routes import main
 from config import Config
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 app = Flask(__name__)
 app.config.from_object(Config)
