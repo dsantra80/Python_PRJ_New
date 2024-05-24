@@ -12,7 +12,7 @@ if not huggingface_token:
     raise EnvironmentError("HUGGINGFACE_TOKEN environment variable is not set")
 
 # Load the text generation pipeline with authorization token
-pipe = pipeline("text-generation", model=model_id, tokenizer=model_id, use_auth_token=huggingface_token)
+pipe = pipeline("text-generation", model=model_id, use_auth_token=huggingface_token)
 
 # Load model and tokenizer directly with authorization token
 tokenizer = AutoTokenizer.from_pretrained(model_id, use_auth_token=huggingface_token)
